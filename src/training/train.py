@@ -23,7 +23,7 @@ def train_model(
     batch_size: int = 32,
     lr: float = 5e-4,
     weight_decay: float = 5e-3,
-    patience: int = 15,
+    patience: int = 30,
     is_graph_model: bool = True,
     device: str = "cpu",
 ) -> Dict[str, list]:

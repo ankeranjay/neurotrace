@@ -25,7 +25,6 @@ class UAGKT(nn.Module):
         self.hidden = hidden
 
         self.gnn = UncertaintyAwareGNN(num_concepts, hidden, gnn_layers)
-        # Residual embedding (bisa belajar tanpa graph)
         self.concept_emb_direct = nn.Embedding(num_concepts, hidden)
         self.response_emb = nn.Embedding(2, hidden)
         self.gru = nn.GRU(hidden * 2, hidden, num_layers=gru_layers,
@@ -39,7 +38,6 @@ class UAGKT(nn.Module):
     def forward(self, c_seq, r_seq, A, U, mc_dropout=False):
         H = self.gnn(A, U)
 
-        # Residual: graph + direct
         concept_combined = H[c_seq] + self.concept_emb_direct(c_seq)
 
         r_prev = torch.zeros_like(r_seq)
