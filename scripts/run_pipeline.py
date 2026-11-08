@@ -86,10 +86,12 @@ def main():
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--hidden", type=int, default=48)
     parser.add_argument("--bkt-mode", choices=["global", "per-skill"], default=None)
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--output-json", type=str, default=None)
     args = parser.parse_args()
 
-    torch.manual_seed(42)
-    np.random.seed(42)
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
 
     # Default: per-skill untuk hf, global untuk synthetic
     if args.bkt_mode is None:
@@ -258,6 +260,29 @@ def main():
     ]
     for name, ok in checks:
         print(f"  [{'OK' if ok else 'FAIL'}] {name}")
+
+    # ============================================================
+    # 8. Save JSON 
+    # ============================================================
+    if args.output_json:
+        import json
+        from pathlib import Path
+        def _json_safe(d):
+            out = {}
+            for k, v in d.items():
+                if isinstance(v, (np.floating, np.integer)):
+                    out[k] = float(v)
+                elif isinstance(v, float) and (np.isnan(v) or np.isinf(v)):
+                    out[k] = None
+                else:
+                    out[k] = v
+            return out
+        out_path = Path(args.output_json)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(out_path, "w") as f:
+            json.dump({k: _json_safe(v) for k, v in results.items()},
+                      f, indent=2)
+        print(f"\n[Saved] {out_path}")
 
 
 if __name__ == "__main__":

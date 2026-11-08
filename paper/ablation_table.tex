@@ -1,0 +1,14 @@
+\begin{table}[h]
+\centering
+\caption{Ablation: incremental contribution of each component.}
+\label{tab:ablation}
+\begin{tabular}{l|cc}
+\toprule
+\textbf{Configuration} & \textbf{AUC} & \textbf{$\Delta$AUC} \\
+\midrule
+A: Temporal ML only (DKT) & 0.713 & --- \\
+B: A + Graph (GKT) & 0.732 & +0.020 \\
+D: B + Uncertainty (UAG-KT) & 0.732 & +0.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
