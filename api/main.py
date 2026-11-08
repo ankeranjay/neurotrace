@@ -23,7 +23,6 @@ def health():
 
 @app.post("/predict")
 def predict_endpoint(data: InteractionIn):
-    # TODO: load model, run inference
     return {"probability": 0.5, "uncertainty": 0.25,
             "note": "stub — wire model from scripts/run_pipeline"}
 
